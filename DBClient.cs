@@ -7,15 +7,14 @@ namespace HotelDBConnection
 {
     class DBClient
     {
-        //Database connection string - replace it with the connnection string to your own database 
-        string connectionString = "Data Source = (localdb)\\ProjectsV13;Initial Catalog = HotelDB; Integrated Security = True; Connect Timeout = 30; Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+        string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=HotelDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
         private int GetMaxHotelNo(SqlConnection connection)
         {
             Console.WriteLine("Calling -> GetMaxHotelNo");
 
-            //This SQL command will fetch one row from the DemoHotel table: The one with the max Hotel_No
-            string queryStringMaxHotelNo = "SELECT  MAX(Hotel_No)  FROM DemoHotel";
+            //This SQL command will fetch one row from the Hotel table: The one with the max Hotel_No
+            string queryStringMaxHotelNo = "SELECT  MAX(Hotel_No)  FROM Hotel";
             Console.WriteLine($"SQL applied: {queryStringMaxHotelNo}");
 
             //Apply SQL command
@@ -46,8 +45,8 @@ namespace HotelDBConnection
         {
             Console.WriteLine("Calling -> DeleteHotel");
 
-            //This SQL command will delete one row from the DemoHotel table: The one with primary key hotel_No
-            string deleteCommandString = $"DELETE FROM DemoHotel  WHERE Hotel_No = {hotel_no}";
+            //This SQL command will delete one row from the Hotel table: The one with primary key hotel_No
+            string deleteCommandString = $"DELETE FROM Hotel  WHERE Hotel_No = {hotel_no}";
             Console.WriteLine($"SQL applied: {deleteCommandString}");
 
             //Apply SQL command
@@ -62,12 +61,32 @@ namespace HotelDBConnection
             return numberOfRowsAffected;
         }
 
+        private int DeleteFacility(SqlConnection connection, int facility_no)
+        {
+            Console.WriteLine("Calling -> DeleteFacility");
+
+            //This SQL command will delete one row from the Facility table: The one with primary key Facility_No
+            string deleteCommandString = $"DELETE FROM Facility WHERE Facility_No = {facility_no}";
+            Console.WriteLine($"SQL applied: {deleteCommandString}");
+
+            //Apply SQL command
+            SqlCommand command = new SqlCommand(deleteCommandString, connection);
+            Console.WriteLine($"Deleting facility #{facility_no}");
+            int numberOfRowsAffected = command.ExecuteNonQuery();
+
+            Console.WriteLine($"Number of rows affected: {numberOfRowsAffected}");
+            Console.WriteLine();
+
+            //Return number of rows affected
+            return numberOfRowsAffected;
+        }
+
         private int UpdateHotel(SqlConnection connection, Hotel hotel)
         {
             Console.WriteLine("Calling -> UpdateHotel");
 
-            //This SQL command will update one row from the DemoHotel table: The one with primary key hotel_No
-            string updateCommandString = $"UPDATE DemoHotel SET Name='{hotel.Name}', Address='{hotel.Address}' WHERE Hotel_No = {hotel.Hotel_No}";
+            //This SQL command will update one row from the Hotel table: The one with primary key Hotel_No
+            string updateCommandString = $"UPDATE Hotel SET Name='{hotel.Name}', Address='{hotel.Address}' WHERE Hotel_No = {hotel.Hotel_No}";
             Console.WriteLine($"SQL applied: {updateCommandString}");
 
             //Apply SQL command
@@ -82,12 +101,32 @@ namespace HotelDBConnection
             return numberOfRowsAffected;
         }
 
+        private int UpdateFacility(SqlConnection connection, Facility facility)
+        {
+            Console.WriteLine("Calling -> UpdateFacility");
+
+            //This SQL command will update one row from the Facility table: The one with primary key Facility_No
+            string updateCommandString = $"UPDATE Facility SET Type='{facility.Type}', Price='{facility.Price}' WHERE Facility_No = {facility.Facility_No}";
+            Console.WriteLine($"SQL applied: {updateCommandString}");
+
+            //Apply SQL command
+            SqlCommand command = new SqlCommand(updateCommandString, connection);
+            Console.WriteLine($"Updating facility #{facility.Facility_No}");
+            int numberOfRowsAffected = command.ExecuteNonQuery();
+
+            Console.WriteLine($"Number of rows affected: {numberOfRowsAffected}");
+            Console.WriteLine();
+
+            //Return number of rows affected
+            return numberOfRowsAffected;
+        }
+
         private int InsertHotel(SqlConnection connection, Hotel hotel)
         {
             Console.WriteLine("Calling -> InsertHotel");
 
-            //This SQL command will insert one row into the DemoHotel table with primary key hotel_No
-            string insertCommandString = $"INSERT INTO DemoHotel VALUES({hotel.Hotel_No}, '{hotel.Name}', '{hotel.Address}')";
+            //This SQL command will insert one row into the Hotel table with primary key hotel_No
+            string insertCommandString = $"INSERT INTO Hotel VALUES({hotel.Hotel_No}, '{hotel.Name}', '{hotel.Address}')";
             Console.WriteLine($"SQL applied: {insertCommandString}");
 
             //Apply SQL command
@@ -103,12 +142,33 @@ namespace HotelDBConnection
             return numberOfRowsAffected;
         }
 
+        private int InsertFacility(SqlConnection connection, Facility facility)
+        {
+            Console.WriteLine("Calling -> InsertFacility");
+
+            //This SQL command will insert one row into the Facility table with primary key Facility_No
+            string insertCommandString = $"INSERT INTO Facility VALUES({facility.Facility_No}, '{facility.Type}', '{facility.Price}')";
+            Console.WriteLine($"SQL applied: {insertCommandString}");
+
+            //Apply SQL command
+            SqlCommand command = new SqlCommand(insertCommandString, connection);
+
+            Console.WriteLine($"Creating facility #{facility.Facility_No}");
+            int numberOfRowsAffected = command.ExecuteNonQuery();
+
+            Console.WriteLine($"Number of rows affected: {numberOfRowsAffected}");
+            Console.WriteLine();
+
+            //Return number of rows affected 
+            return numberOfRowsAffected;
+        }
+
         private List<Hotel> ListAllHotels(SqlConnection connection)
         {
             Console.WriteLine("Calling -> ListAllHotels");
 
             //This SQL command will fetch all rows and columns from the DemoHotel table
-            string queryStringAllHotels = "SELECT * FROM DemoHotel";
+            string queryStringAllHotels = "SELECT * FROM Hotel";
             Console.WriteLine($"SQL applied: {queryStringAllHotels}");
 
             //Apply SQL command
@@ -159,7 +219,7 @@ namespace HotelDBConnection
             Console.WriteLine("Calling -> GetHotel");
 
             //This SQL command will fetch the row with primary key hotel_no from the DemoHotel table
-            string queryStringOneHotel = $"SELECT * FROM DemoHotel WHERE hotel_no = {hotel_no}";
+            string queryStringOneHotel = $"SELECT * FROM Hotel WHERE hotel_no = {hotel_no}";
             Console.WriteLine($"SQL applied: {queryStringOneHotel}");
 
             //Prepare SQK command
@@ -179,7 +239,7 @@ namespace HotelDBConnection
                 return null;
             }
 
-            //Fetch hotel object from teh database
+            //Fetch hotel object from the database
             Hotel hotel = null; 
             if (reader.Read())
             {
@@ -200,6 +260,53 @@ namespace HotelDBConnection
             //Return found hotel
             return hotel;
         }
+
+        private Facility GetFacility(SqlConnection connection, int facility_no)
+        {
+            Console.WriteLine("Calling -> GetFacility");
+
+            //This SQL command will fetch the row with primary key facility_no from the Facility table
+            string queryStringOneFacility = $"SELECT * FROM Facility WHERE Facility_No = {facility_no}";
+            Console.WriteLine($"SQL applied: {queryStringOneFacility}");
+
+            //Prepare SQL command
+            SqlCommand command = new SqlCommand(queryStringOneFacility, connection);
+            SqlDataReader reader = command.ExecuteReader();
+
+            Console.WriteLine($"Finding facility#: {facility_no}");
+
+            //NO rows in the query? 
+            if (!reader.HasRows)
+            {
+                //End here
+                Console.WriteLine("No facilities in database");
+                reader.Close();
+
+                //Return null for 'no facility found'
+                return null;
+            }
+
+            //Fetch facility object from the database
+            Facility facility = null;
+            if (reader.Read())
+            {
+                facility = new Facility()
+                {
+                    Facility_No = reader.GetInt32(0), //Reading int fro 1st column
+                    Type = reader.GetString(1),    //Reading string from 2nd column
+                    Price = reader.GetInt32(2)  //Reading string from 3rd column
+                };
+
+                Console.WriteLine();
+            }
+
+            //Close reader
+            reader.Close();
+            Console.WriteLine();
+
+            //Return found facility
+            return facility;
+        }
         public void Start()
         {
             //Apply 'using' to connection (SqlConnection) in order to call Dispose (interface IDisposable) 
@@ -219,6 +326,7 @@ namespace HotelDBConnection
                     Name = "New Hotel",
                     Address = "Maglegaardsvej 2, 4000 Roskilde"
                 };
+
 
                 //Insert the hotel into the database
                 InsertHotel(connection, newHotel);

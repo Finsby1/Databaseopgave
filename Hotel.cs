@@ -18,5 +18,3 @@ namespace HotelDBConnection
     }
 }
 
-//testing testing 123
-
